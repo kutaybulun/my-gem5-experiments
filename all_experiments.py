@@ -7,6 +7,12 @@ usage:
     to run a specific simulation:
         gem5riscv all_experiments.py <id>
 """
+import os
+import sys
+
+script_dir = os.path.abspath(os.path.dirname(__file__))
+if script_dir not in sys.path:
+    sys.path.insert(0, script_dir)
 
 from components import (
     RISCVBoard,
