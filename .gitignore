@@ -1,0 +1,5 @@
+gem5
+.vscode
+m5out
+*.pyc
+__pycache__
