@@ -11,7 +11,16 @@ from m5.objects.BranchPredictor import (
 
 
 class OutOfOrderCPUCore(RiscvO3CPU):
-    def __init__(self, width, rob_size, num_int_regs, num_fp_regs):
+    def __init__(self, 
+                 width, 
+                 rob_size, 
+                 num_int_regs, 
+                 num_fp_regs,
+                 fetchB_size,
+                 fetchQ_size,
+                 instructionQ_size,
+                 loadQ_size,
+                 storeQ_size):
         """
         OutOfOrderCPUCore extends RiscvO3CPU. RiscvO3CPU is one of gem5's
         internal models the implements an out of order pipeline.
@@ -32,26 +41,44 @@ class OutOfOrderCPUCore(RiscvO3CPU):
         register file.
         """
         super().__init__()
+        # Width of the pipeline stages
         self.fetchWidth = width
         self.decodeWidth = width
         self.renameWidth = width
+        self.dispatchWidth = width
         self.issueWidth = width
         self.wbWidth = width
         self.commitWidth = width
-
-        self.numROBEntries = rob_size
-
+        
+        # Number of physical registers
         self.numPhysIntRegs = num_int_regs
         self.numPhysFloatRegs = num_fp_regs
 
+        # Branch predictor
         self.branchPred = TournamentBP()
 
-        self.LQEntries = 128
-        self.SQEntries = 128
+        # Queue sizes and buffer sizes
+        self.fetchBufferSize = 4 * width * fetchB_size
+        self.fetchQueueSize = width * fetchQ_size
+        self.numIQEntries = width * instructionQ_size
+        self.LQEntries = width * loadQ_size
+        self.SQEntries = width * storeQ_size
+
+        # Reorder buffer size
+        self.numROBEntries = rob_size
 
 
 class OutOfOrderCPUStdCore(BaseCPUCore):
-    def __init__(self, width, rob_size, num_int_regs, num_fp_regs):
+    def __init__(self, 
+                 width, 
+                 rob_size, 
+                 num_int_regs, 
+                 num_fp_regs,
+                 fetchB_size,
+                 fetchQ_size,
+                 instructionQ_size,
+                 loadQ_size,
+                 storeQ_size):
         """
         OutOfOrderCPUStdCore wraps OutOfOrderCPUCore into a gem5 standard
         library core.
@@ -63,12 +90,30 @@ class OutOfOrderCPUStdCore(BaseCPUCore):
         :param num_int_regs: determines the size of the vector/floating point
         register file.
         """
-        core = OutOfOrderCPUCore(width, rob_size, num_int_regs, num_fp_regs)
+        core = OutOfOrderCPUCore(width, 
+                                 rob_size, 
+                                 num_int_regs, 
+                                 num_fp_regs, 
+                                 fetchB_size, 
+                                 fetchQ_size, 
+                                 instructionQ_size, 
+                                 loadQ_size, 
+                                 storeQ_size)
+        
         super().__init__(core, ISA.RISCV)
 
 
 class OutOfOrderCPU(BaseCPUProcessor):
-    def __init__(self, width, rob_size, num_int_regs, num_fp_regs):
+    def __init__(self, 
+                 width, 
+                 rob_size, 
+                 num_int_regs, 
+                 num_fp_regs,
+                 fetchB_size,
+                 fetchQ_size,
+                 instructionQ_size,
+                 loadQ_size,
+                 storeQ_size):
         """
         OutOfOrderCPU models a single core CPU with support for the RISC-V
         instruction set architecture (ISA). This model uses the O3 CPU model
@@ -85,13 +130,18 @@ class OutOfOrderCPU(BaseCPUProcessor):
         register file.
         """
         cores = [
-            OutOfOrderCPUStdCore(width, rob_size, num_int_regs, num_fp_regs)
+            OutOfOrderCPUStdCore(width, rob_size, num_int_regs, num_fp_regs, fetchB_size, fetchQ_size, instructionQ_size, loadQ_size, storeQ_size)
         ]
         super().__init__(cores)
         self._width = width
         self._rob_size = rob_size
         self._num_int_regs = num_int_regs
         self._num_fp_regs = num_fp_regs
+        self._fetchB_size = fetchB_size
+        self._fetchQ_size = fetchQ_size
+        self._instructionQ_size = instructionQ_size
+        self._loadQ_size = loadQ_size
+        self._storeQ_size = storeQ_size
 
     def get_area_score(self):
         """

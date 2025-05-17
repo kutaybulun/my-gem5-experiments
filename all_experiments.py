@@ -39,10 +39,10 @@ def get_board_inorder():
 
     return board
 
-def get_board_o3(width, rob_size, num_int_regs, num_fp_regs):
+def get_board_o3(width, rob_size, num_int_regs, num_fp_regs, fetchB_size, fetchQ_size, instructionQ_size, loadQ_size, storeQ_size):
     cache = PrivateL1SharedL2Cache()
     memory = DDR4()
-    cpu = OutOfOrderCPU(width, rob_size, num_int_regs, num_fp_regs)
+    cpu = OutOfOrderCPU(width, rob_size, num_int_regs, num_fp_regs, fetchB_size, fetchQ_size, instructionQ_size, loadQ_size, storeQ_size)
 
     board = RISCVBoard(
         clk_freq="1GHz", processor=cpu, cache_hierarchy=cache, memory=memory
@@ -58,20 +58,18 @@ board_inorder.set_se_binary_workload(
 
 # Out-of-order CPU configurations
 configurations = {
-    "little": {"width": 4, "rob_size": 32, "num_int_regs": 64, "num_fp_regs": 64},
+    "little": {"width": 4, "rob_size": 32, "num_int_regs": 64, "num_fp_regs": 64, "fetchB_size": 4, "fetchQ_size": 8, "instructionQ_size": 16, "loadQ_size": 16, "storeQ_size": 16},
     "big": {"width": 12, "rob_size": 384, "num_int_regs": 512, "num_fp_regs": 512},
 }
-board_o3 = get_board_o3(**configurations["big"])
+board_o3 = get_board_o3(**configurations["little"])
 board_o3.set_se_binary_workload(
     obtain_resource(resource_id="riscv-matrix-multiply")
 )
 
 # Simulator Runs
 simulator_inorder = Simulator(board=board_inorder, id="inorder-riscv-matrix-multiply")
-#simulator_inorder.override_outdir(Path("inorder-riscv-matrix-multiply"))
 
 simulator_o3 = Simulator(board=board_o3, id="o3-riscv-matrix-multiply")
-#simulator_o3.override_outdir(Path("o3-riscv-matrix-multiply"))
 
 multisim.add_simulator(simulator_inorder)
 multisim.add_simulator(simulator_o3)
