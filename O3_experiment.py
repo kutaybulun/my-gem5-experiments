@@ -25,8 +25,8 @@ configurations = {
 
 board = get_board(**configurations["big"])
 board.set_se_binary_workload(
-    obtain_resource(resource_id="riscv-matrix-multiply")
+    obtain_resource(resource_id="riscv-bubblesort")
 )
 
-simulator = Simulator(board=board, id="big-hello")
+simulator = Simulator(board=board, id="little-hello")
 simulator.run()

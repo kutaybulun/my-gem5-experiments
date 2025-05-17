@@ -1,0 +1,24 @@
+give the sim the ability to tune the folowing parameters for O3 CPU:
+issue width: 
+    fetchWidth,         (NUMBER OF INSRUCTIONS TO FETCH PER CYCLE) (n)
+    fetchBufferSize,    (FETCHED INTO THIS) (bytes) (n*4*cycles_of_slack)
+    fetchQueueSize      (FETCHED INTO THIS) (n*cycles_in_fetchQ)
+decode width: 
+    decodeWidth         (NUMNBER OF INSTRUCTIONS TO DECODE PER CYCLE) (n)
+register renaming: 
+    numPhysIntRegs,     (PYHSICAL REGISTERS) (any, min:64?)
+    numPhysFloatRegs,   (PHYSICAL REGISTERS) (any, min:64?)
+    renameWidth         (NUMBER REGISTERS TO RENAME PER CYCLE) (n)             
+send to instruction queue and load-store queue:
+    dispatchWidth       (TOTAL NUMBER OF INSTRUCTIONS TO DISPATCH) (n)
+    numIQEntries        (INSTRUCTION QUEUE DEPTH) (n*cycles_in_IQ)
+    LQEntries           (LOAD DEPTH IN LOAD-STORE QUEUE) (n*cycles_in_LQ)
+    SQEntries           (STORE DEPTH IN LOAD-STORE QUEUE) (n*cycles_in_SQ)            
+issue, execute, writeback:
+    issueWidth          (NUMBER OF INSTRUCTIONS TO ISSUE PER CYCLE) (n)
+    wbWidth             (NUMBER OF INSTRUCTIONS TO WRITEBACK PER CYCLE) (n)
+commit:
+    commitWidth         (NUMNER OF INSTRUCTIONS TO COMMIT PER CYCLE) (n)
+reorder buffer:
+    numROBEntries       (REORDER BUFFER SIZE) (any, min:32?)
+    
