@@ -41,7 +41,7 @@ class OutOfOrderCPUCore(RiscvO3CPU):
         register file.
         """
         super().__init__()
-        # Width of the pipeline stages
+        # Width of the pipeline stages, max is 12
         self.fetchWidth = width
         self.decodeWidth = width
         self.renameWidth = width
@@ -58,11 +58,11 @@ class OutOfOrderCPUCore(RiscvO3CPU):
         self.branchPred = TournamentBP()
 
         # Queue sizes and buffer sizes
-        self.fetchBufferSize = 4 * width * fetchB_size
-        self.fetchQueueSize = width * fetchQ_size
-        self.numIQEntries = width * instructionQ_size
-        self.LQEntries = width * loadQ_size
-        self.SQEntries = width * storeQ_size
+        self.fetchBufferSize = fetchB_size # default is 64B, shouldn't be biger than cache block size
+        self.fetchQueueSize = width * fetchQ_size   # default is 32
+        self.numIQEntries = width * instructionQ_size # default is 64
+        self.LQEntries = width * loadQ_size # default is 32
+        self.SQEntries = width * storeQ_size # default is 32
 
         # Reorder buffer size
         self.numROBEntries = rob_size

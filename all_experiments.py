@@ -55,21 +55,88 @@ board_inorder = get_board_inorder()
 board_inorder.set_se_binary_workload(
     obtain_resource(resource_id="riscv-matrix-multiply")
 )
+simulator_inorder = Simulator(board=board_inorder, id="inorder-riscv-matrix-multiply")
+multisim.add_simulator(simulator_inorder)
 
 # Out-of-order CPU configurations
+#configurations = {
+#    "little": {"width": 4, "rob_size": 32, "num_int_regs": 64, "num_fp_regs": 64, "fetchB_size": 4, "fetchQ_size": 8, "instructionQ_size": 16, "loadQ_size": 16, "storeQ_size": 16},
+#    "big": {"width": 12, "rob_size": 384, "num_int_regs": 512, "num_fp_regs": 512},
+#}
+#board_o3 = get_board_o3(**configurations["little"])
+#board_o3.set_se_binary_workload(
+#    obtain_resource(resource_id="riscv-matrix-multiply")
+#)
+#simulator_o3 = Simulator(board=board_o3, id="o3-riscv-matrix-multiply")
+#multisim.add_simulator(simulator_o3)
+
 configurations = {
-    "little": {"width": 4, "rob_size": 32, "num_int_regs": 64, "num_fp_regs": 64, "fetchB_size": 4, "fetchQ_size": 8, "instructionQ_size": 16, "loadQ_size": 16, "storeQ_size": 16},
-    "big": {"width": 12, "rob_size": 384, "num_int_regs": 512, "num_fp_regs": 512},
+    "little": {
+        "width": 4,
+        "rob_size": 32,
+        "num_int_regs": 64,
+        "num_fp_regs": 64,
+        "fetchB_size": 64,
+        "fetchQ_size": 8,
+        "instructionQ_size": 16,
+        "loadQ_size": 16,
+        "storeQ_size": 16,
+    },
+    "big": {
+        "width": 12,
+        "rob_size": 384,
+        "num_int_regs": 512,
+        "num_fp_regs": 512,
+        "fetchB_size": 64,
+        "fetchQ_size": 16,
+        "instructionQ_size": 32,
+        "loadQ_size": 32,
+        "storeQ_size": 32,
+    },
+    "width-small": {
+        "width": 2,
+        "rob_size": 32,
+        "num_int_regs": 64,
+        "num_fp_regs": 64,
+        "fetchB_size": 64,
+        "fetchQ_size": 32,
+        "instructionQ_size": 64,
+        "loadQ_size": 32,
+        "storeQ_size": 32,
+    },
+    "width-medium": {
+        "width": 8,
+        "rob_size": 32,
+        "num_int_regs": 64,
+        "num_fp_regs": 64,
+        "fetchB_size": 64,
+        "fetchQ_size": 32,
+        "instructionQ_size": 64,
+        "loadQ_size": 32,
+        "storeQ_size": 32,
+    },
+    "width-big": {
+        "width": 12,
+        "rob_size": 32,
+        "num_int_regs": 64,
+        "num_fp_regs": 64,
+        "fetchB_size": 64,
+        "fetchQ_size": 32,
+        "instructionQ_size": 64,
+        "loadQ_size": 32,
+        "storeQ_size": 32,
+    },
+    # add more configs here…
 }
-board_o3 = get_board_o3(**configurations["little"])
-board_o3.set_se_binary_workload(
-    obtain_resource(resource_id="riscv-matrix-multiply")
-)
 
-# Simulator Runs
-simulator_inorder = Simulator(board=board_inorder, id="inorder-riscv-matrix-multiply")
+for name, params in configurations.items():
+    board_o3 = get_board_o3(**params)
+    board_o3.set_se_binary_workload(
+        obtain_resource(resource_id="riscv-matrix-multiply")
+    )
 
-simulator_o3 = Simulator(board=board_o3, id="o3-riscv-matrix-multiply")
-
-multisim.add_simulator(simulator_inorder)
-multisim.add_simulator(simulator_o3)
+    sim_o3 = Simulator(
+        board=board_o3,
+        id=f"o3-{name}-riscv-matrix-multiply"
+    )
+    multisim.add_simulator(sim_o3)
