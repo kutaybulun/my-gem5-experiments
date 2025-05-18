@@ -21,4 +21,17 @@ commit:
     commitWidth         (NUMNER OF INSTRUCTIONS TO COMMIT PER CYCLE) (n)
 reorder buffer:
     numROBEntries       (REORDER BUFFER SIZE) (any, min:32?)
-    
+
+create your own workload
+create all of the configs
+start running
+find a way to parse and visualize the results
+run konata for select ones
+
+in the report:
+why SE mode?
+what is the system, cache, memory etc.?
+what is the architecture of the processors?
+what do we tune and why?
+...
+ 

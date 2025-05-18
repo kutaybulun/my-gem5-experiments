@@ -60,83 +60,137 @@ multisim.add_simulator(simulator_inorder)
 
 # Out-of-order CPU configurations
 #configurations = {
-#    "little": {"width": 4, "rob_size": 32, "num_int_regs": 64, "num_fp_regs": 64, "fetchB_size": 4, "fetchQ_size": 8, "instructionQ_size": 16, "loadQ_size": 16, "storeQ_size": 16},
-#    "big": {"width": 12, "rob_size": 384, "num_int_regs": 512, "num_fp_regs": 512},
+#    "little": {
+#        "width": 4,
+#        "rob_size": 32,
+#        "num_int_regs": 64,
+#        "num_fp_regs": 64,
+#        "fetchB_size": 64,
+#        "fetchQ_size": 8,
+#        "instructionQ_size": 16,
+#        "loadQ_size": 16,
+#        "storeQ_size": 16,
+#    },
+#    "big": {
+#        "width": 12,
+#        "rob_size": 384,
+#        "num_int_regs": 512,
+#        "num_fp_regs": 512,
+#        "fetchB_size": 64,
+#        "fetchQ_size": 16,
+#        "instructionQ_size": 32,
+#        "loadQ_size": 32,
+#        "storeQ_size": 32,
+#    },
+#    "width-small": {
+#        "width": 2,
+#        "rob_size": 32,
+#        "num_int_regs": 64,
+#        "num_fp_regs": 64,
+#        "fetchB_size": 64,
+#        "fetchQ_size": 32,
+#        "instructionQ_size": 64,
+#        "loadQ_size": 32,
+#        "storeQ_size": 32,
+#    },
+#    "width-medium": {
+#        "width": 8,
+#        "rob_size": 32,
+#        "num_int_regs": 64,
+#        "num_fp_regs": 64,
+#        "fetchB_size": 64,
+#        "fetchQ_size": 32,
+#        "instructionQ_size": 64,
+#        "loadQ_size": 32,
+#        "storeQ_size": 32,
+#    },
+#    "width-big": {
+#        "width": 12,
+#        "rob_size": 32,
+#        "num_int_regs": 64,
+#        "num_fp_regs": 64,
+#        "fetchB_size": 64,
+#        "fetchQ_size": 32,
+#        "instructionQ_size": 64,
+#        "loadQ_size": 32,
+#        "storeQ_size": 32,
+#    },
+#    # add more configs here…
 #}
-#board_o3 = get_board_o3(**configurations["little"])
-#board_o3.set_se_binary_workload(
-#    obtain_resource(resource_id="riscv-matrix-multiply")
-#)
-#simulator_o3 = Simulator(board=board_o3, id="o3-riscv-matrix-multiply")
-#multisim.add_simulator(simulator_o3)
+#
+## Hand picked configurations
+#for name, params in configurations.items():
+#    board_o3 = get_board_o3(**params)
+#    board_o3.set_se_binary_workload(
+#        obtain_resource(resource_id="riscv-matrix-multiply")
+#    )
+#    sim_o3 = Simulator(
+#        board=board_o3,
+#        id=f"o3-{name}-riscv-matrix-multiply"
+#    )
+#    multisim.add_simulator(sim_o3)
 
-configurations = {
-    "little": {
-        "width": 4,
-        "rob_size": 32,
-        "num_int_regs": 64,
-        "num_fp_regs": 64,
-        "fetchB_size": 64,
-        "fetchQ_size": 8,
-        "instructionQ_size": 16,
-        "loadQ_size": 16,
-        "storeQ_size": 16,
-    },
-    "big": {
-        "width": 12,
-        "rob_size": 384,
-        "num_int_regs": 512,
-        "num_fp_regs": 512,
-        "fetchB_size": 64,
-        "fetchQ_size": 16,
-        "instructionQ_size": 32,
-        "loadQ_size": 32,
-        "storeQ_size": 32,
-    },
-    "width-small": {
-        "width": 2,
-        "rob_size": 32,
-        "num_int_regs": 64,
-        "num_fp_regs": 64,
-        "fetchB_size": 64,
-        "fetchQ_size": 32,
-        "instructionQ_size": 64,
-        "loadQ_size": 32,
-        "storeQ_size": 32,
-    },
-    "width-medium": {
-        "width": 8,
-        "rob_size": 32,
-        "num_int_regs": 64,
-        "num_fp_regs": 64,
-        "fetchB_size": 64,
-        "fetchQ_size": 32,
-        "instructionQ_size": 64,
-        "loadQ_size": 32,
-        "storeQ_size": 32,
-    },
-    "width-big": {
-        "width": 12,
-        "rob_size": 32,
-        "num_int_regs": 64,
-        "num_fp_regs": 64,
-        "fetchB_size": 64,
-        "fetchQ_size": 32,
-        "instructionQ_size": 64,
-        "loadQ_size": 32,
-        "storeQ_size": 32,
-    },
-    # add more configs here…
+# For sweeping the parameters we have a base configuration.
+base= {
+    "width": 4,
+    "rob_size": 128,
+    "num_int_regs": 128,
+    "num_fp_regs": 128,
+    "fetchB_size": 64,
+    "fetchQ_size": 32,
+    "instructionQ_size": 64,
+    "loadQ_size": 128,
+    "storeQ_size": 128,
 }
 
-for name, params in configurations.items():
+sweeps = []
+
+# Sweep width
+for w in [2, 4, 8, 10, 12]:
+    cfg = base.copy()
+    cfg["width"] = w
+    sweeps.append(("width-%02d" % w, cfg))
+
+# Sweep ROB size
+for rob in [32, 64, 128, 256, 512]:
+    cfg = base.copy()
+    cfg["rob_size"] = rob
+    sweeps.append(("rob-%03d" % rob, cfg))
+
+# Sweep register file size
+for regs in [32, 64, 128, 256, 512]:
+    cfg = base.copy()
+    cfg["num_int_regs"] = regs
+    cfg["num_fp_regs"] = regs
+    sweeps.append(("pyhsical_regs-%03d" % regs, cfg))
+
+# Sweep fetch queue size
+for fetchQ in [32, 64, 128, 256, 512]:
+    cfg = base.copy()
+    cfg["fetchQ_size"] = fetchQ
+    sweeps.append(("fetchQ-%02d" % fetchQ, cfg))
+
+# Sweep instruction queue size
+for instructionQ in [32, 64, 128, 256, 512]:
+    cfg = base.copy()
+    cfg["instructionQ_size"] = instructionQ
+    sweeps.append(("instructionQ-%02d" % instructionQ, cfg))
+
+# Sweep load queue and store queue size
+for lsQ in [32, 64, 128, 256, 512]:
+    cfg = base.copy()
+    cfg["loadQ_size"] = lsQ
+    cfg["storeQ_size"] = lsQ
+    sweeps.append(("lsQ-%02d" % lsQ, cfg))
+
+for name, params in sweeps:
     board_o3 = get_board_o3(**params)
     board_o3.set_se_binary_workload(
         obtain_resource(resource_id="riscv-matrix-multiply")
     )
-
     sim_o3 = Simulator(
         board=board_o3,
         id=f"o3-{name}-riscv-matrix-multiply"
     )
     multisim.add_simulator(sim_o3)
+

@@ -59,10 +59,10 @@ class OutOfOrderCPUCore(RiscvO3CPU):
 
         # Queue sizes and buffer sizes
         self.fetchBufferSize = fetchB_size # default is 64B, shouldn't be biger than cache block size
-        self.fetchQueueSize = width * fetchQ_size   # default is 32
-        self.numIQEntries = width * instructionQ_size # default is 64
-        self.LQEntries = width * loadQ_size # default is 32
-        self.SQEntries = width * storeQ_size # default is 32
+        self.fetchQueueSize = fetchQ_size   # default is 32
+        self.numIQEntries = instructionQ_size # default is 64
+        self.LQEntries = loadQ_size # default is 32
+        self.SQEntries = storeQ_size # default is 32
 
         # Reorder buffer size
         self.numROBEntries = rob_size
