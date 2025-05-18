@@ -3,8 +3,3 @@ gem5
 m5out
 *.pyc
 __pycache__
-configs
-to_do.txt
-experiments.py
-inorder_experiment.py
-O3_experiment.py
