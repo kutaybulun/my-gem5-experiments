@@ -94,6 +94,7 @@ sweeps = []
 
 # Very big configuration
 sweeps.append(("very-big", very_big))
+sweeps.append(("base", base))
 
 # Sweep width
 for w in [2, 4, 8, 10, 12]:
@@ -112,7 +113,7 @@ for regs in [32, 64, 128, 256, 512]:
     cfg = base.copy()
     cfg["num_int_regs"] = regs
     cfg["num_fp_regs"] = regs
-    sweeps.append(("pyhsical_regs-%03d" % regs, cfg))
+    sweeps.append(("physical-regs-%03d" % regs, cfg))
 
 # Sweep fetch queue size
 for fetchQ in [32, 64, 128, 256, 512]:

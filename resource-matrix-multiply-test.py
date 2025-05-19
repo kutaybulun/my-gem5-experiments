@@ -59,77 +59,6 @@ simulator_inorder = Simulator(board=board_inorder, id="inorder-riscv-matrix-mult
 multisim.add_simulator(simulator_inorder)
 
 # Out-of-order CPU configurations
-#configurations = {
-#    "little": {
-#        "width": 4,
-#        "rob_size": 32,
-#        "num_int_regs": 64,
-#        "num_fp_regs": 64,
-#        "fetchB_size": 64,
-#        "fetchQ_size": 8,
-#        "instructionQ_size": 16,
-#        "loadQ_size": 16,
-#        "storeQ_size": 16,
-#    },
-#    "big": {
-#        "width": 12,
-#        "rob_size": 384,
-#        "num_int_regs": 512,
-#        "num_fp_regs": 512,
-#        "fetchB_size": 64,
-#        "fetchQ_size": 16,
-#        "instructionQ_size": 32,
-#        "loadQ_size": 32,
-#        "storeQ_size": 32,
-#    },
-#    "width-small": {
-#        "width": 2,
-#        "rob_size": 32,
-#        "num_int_regs": 64,
-#        "num_fp_regs": 64,
-#        "fetchB_size": 64,
-#        "fetchQ_size": 32,
-#        "instructionQ_size": 64,
-#        "loadQ_size": 32,
-#        "storeQ_size": 32,
-#    },
-#    "width-medium": {
-#        "width": 8,
-#        "rob_size": 32,
-#        "num_int_regs": 64,
-#        "num_fp_regs": 64,
-#        "fetchB_size": 64,
-#        "fetchQ_size": 32,
-#        "instructionQ_size": 64,
-#        "loadQ_size": 32,
-#        "storeQ_size": 32,
-#    },
-#    "width-big": {
-#        "width": 12,
-#        "rob_size": 32,
-#        "num_int_regs": 64,
-#        "num_fp_regs": 64,
-#        "fetchB_size": 64,
-#        "fetchQ_size": 32,
-#        "instructionQ_size": 64,
-#        "loadQ_size": 32,
-#        "storeQ_size": 32,
-#    },
-#    # add more configs here…
-#}
-#
-## Hand picked configurations
-#for name, params in configurations.items():
-#    board_o3 = get_board_o3(**params)
-#    board_o3.set_se_binary_workload(
-#        obtain_resource(resource_id="riscv-matrix-multiply")
-#    )
-#    sim_o3 = Simulator(
-#        board=board_o3,
-#        id=f"o3-{name}-riscv-matrix-multiply"
-#    )
-#    multisim.add_simulator(sim_o3)
-
 # For sweeping the parameters we have a base configuration.
 base= {
     "width": 4,
@@ -159,6 +88,7 @@ sweeps = []
 
 # Very big configuration
 sweeps.append(("very-big", very_big))
+sweeps.append(("base", base))
 
 # Sweep width
 for w in [2, 4, 8, 10, 12]:
@@ -177,7 +107,7 @@ for regs in [32, 64, 128, 256, 512]:
     cfg = base.copy()
     cfg["num_int_regs"] = regs
     cfg["num_fp_regs"] = regs
-    sweeps.append(("pyhsical_regs-%03d" % regs, cfg))
+    sweeps.append(("physical-regs-%03d" % regs, cfg))
 
 # Sweep fetch queue size
 for fetchQ in [32, 64, 128, 256, 512]:
