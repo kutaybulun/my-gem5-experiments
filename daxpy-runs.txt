@@ -1,0 +1,33 @@
+OK inorder-daxpy
+OK o3-very-big-daxpy
+OK o3-base-daxpy
+OK o3-width-02-daxpy
+o3-width-04-daxpy
+o3-width-08-daxpy
+o3-width-10-daxpy
+o3-width-12-daxpy
+o3-rob-032-daxpy
+o3-rob-064-daxpy
+o3-rob-128-daxpy
+o3-rob-256-daxpy
+o3-rob-512-daxpy
+o3-physical-regs-032-daxpy
+o3-physical-regs-064-daxpy
+o3-physical-regs-128-daxpy
+o3-physical-regs-256-daxpy
+o3-physical-regs-512-daxpy
+o3-fetchQ-32-daxpy
+o3-fetchQ-64-daxpy
+o3-fetchQ-128-daxpy
+o3-fetchQ-256-daxpy
+o3-fetchQ-512-daxpy
+o3-instructionQ-32-daxpy
+o3-instructionQ-64-daxpy
+o3-instructionQ-128-daxpy
+o3-instructionQ-256-daxpy
+o3-instructionQ-512-daxpy
+o3-lsQ-32-daxpy
+o3-lsQ-64-daxpy
+o3-lsQ-128-daxpy
+o3-lsQ-256-daxpy
+o3-lsQ-512-daxpy

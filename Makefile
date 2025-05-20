@@ -3,4 +3,3 @@
 .PHONY: clean
 
 clean:
-	rm -rf m5out
