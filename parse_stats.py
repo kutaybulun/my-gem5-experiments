@@ -8,21 +8,23 @@ Usage (either style):
   ./parse_and_plot_gem5_stats.py \
     --runs width4 width8 width12 \
     --stats sim_seconds sim_insts ipc numCycles \
-    [--base-dir m5out] [--save-plots] [--output-csv collected.csv]
+    [--base-dir m5out] [--save-plots --plots-dir my_plots] [--output-csv collected.csv]
 
   # 2) From text files:
   ./parse_and_plot_gem5_stats.py \
     --runs-file runs.txt \
     --stats-file stats.txt \
-    [--base-dir m5out] [--save-plots] [--output-csv collected.csv]
+    [--base-dir m5out] [--save-plots --plots-dir my_plots] [--output-csv collected.csv]
 
-  'runs.txt' and 'stats.txt' should have one name per line. Lines beginning
-  with '#' or blank lines are ignored.
-
-Defaults:
-  --base-dir m5out
-  --output-csv collected_stats.csv
-  plots show on screen (omit --save-plots)
+Options:
+  --base-dir     Directory containing subfolders for each run (default: m5out)
+  --runs / --runs-file  
+                 Either list run names on the CLI or load them from a text file
+  --stats / --stats-file
+                 Either list stat names on the CLI or load them from a text file
+  --save-plots   If set, saves plots instead of displaying them
+  --plots-dir    Directory under which to save PNGs (default: plots)
+  --output-csv   Path to write the collected statistics CSV (default: collected_stats.csv)
 """
 
 import os
@@ -31,7 +33,6 @@ import argparse
 import pandas as pd
 import matplotlib.pyplot as plt
 
-# regex to match "name   value" (int, float, sci-notation, or nan), ignore trailing comments
 STAT_LINE_RE = re.compile(
     r'^(?P<name>\S+)\s+'
     r'(?P<value>[+-]?\d+(?:\.\d*)?(?:[eE][+-]?\d+)?|nan)'
@@ -83,13 +84,11 @@ def main():
     )
     p.add_argument('--base-dir', default='m5out',
                    help="Directory containing subfolders for each run (default: m5out)")
-    # runs: either via --runs or --runs-file
     runs_group = p.add_mutually_exclusive_group(required=True)
     runs_group.add_argument('--runs', nargs='+',
                             help="Run names (subfolder names under base-dir)")
     runs_group.add_argument('--runs-file', metavar='FILE',
                             help="Text file with one run name per line")
-    # stats: either via --stats or --stats-file
     stats_group = p.add_mutually_exclusive_group(required=True)
     stats_group.add_argument('--stats', nargs='+',
                              help="Stat names to extract (exactly as in stats.txt)")
@@ -97,18 +96,16 @@ def main():
                              help="Text file with one stat name per line")
     p.add_argument('--save-plots', action='store_true',
                    help="Save plots as PNGs instead of displaying them")
+    p.add_argument('--plots-dir', default='plots',
+                   help="Directory under which to save PNGs (default: plots)")
     p.add_argument('--output-csv', default='collected_stats.csv',
                    help="Write collected statistics to this CSV file (default: collected_stats.csv)")
     args = p.parse_args()
 
-    # load run names
-    runs = load_list_from_file(args.runs_file) if args.runs_file else args.runs
-    # load stat names
+    runs  = load_list_from_file(args.runs_file) if args.runs_file else args.runs
     stats = load_list_from_file(args.stats_file) if args.stats_file else args.stats
 
-    # collect data
-    rows = []
-    idx  = []
+    rows, idx = [], []
     for run in runs:
         stats_path = os.path.join(args.base_dir, run, 'stats.txt')
         if not os.path.isfile(stats_path):
@@ -125,17 +122,18 @@ def main():
         print("No data collected; exiting.")
         return
 
-    # build DataFrame
     df = pd.DataFrame(rows, index=idx)
     df.index.name = 'Run'
     print("\nCollected statistics:\n")
     print(df)
 
-    # write to CSV for Excel
+    # Write CSV for Excel
     df.to_csv(args.output_csv)
-    print(f"\nSaved collected stats to '{args.output_csv}'")
+    print(f"✓ Saved collected stats to '{args.output_csv}'")
 
-    # plot each stat
+    # Plot each stat
+    if args.save_plots:
+        os.makedirs(args.plots_dir, exist_ok=True)
     for stat in stats:
         if stat not in df.columns:
             print(f"[note] stat '{stat}' missing—skipping plot.")
@@ -149,10 +147,9 @@ def main():
         plt.tight_layout()
 
         if args.save_plots:
-            outdir = "plots"
-            os.makedirs(outdir, exist_ok=True)
-            plt.savefig(os.path.join(outdir, f"{stat}.png"))
-            print(f"→ Saved plot: {os.path.join(outdir, f'{stat}.png')}")
+            outname = os.path.join(args.plots_dir, f"{stat}.png")
+            plt.savefig(outname)
+            print(f"→ Saved {stat} plot to '{outname}'")
         else:
             plt.show()
 
