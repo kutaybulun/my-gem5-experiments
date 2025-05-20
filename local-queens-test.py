@@ -91,11 +91,24 @@ very_big = {
     "storeQ_size": 512,
 }
 
+very_small = {
+    "width": 4,
+    "rob_size": 32,
+    "num_int_regs": 64,
+    "num_fp_regs": 64,
+    "fetchB_size": 32,
+    "fetchQ_size": 16,
+    "instructionQ_size": 16,
+    "loadQ_size": 32,
+    "storeQ_size": 32,
+}
+
 sweeps = []
 
 # Very big configuration
 sweeps.append(("very-big", very_big))
 sweeps.append(("base", base))
+sweeps.append(("very-small", very_small))
 
 # Sweep width
 for w in [2, 4, 8, 10, 12]:

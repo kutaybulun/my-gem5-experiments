@@ -1,1 +1,40 @@
+# Execution time
+simSeconds
+# Number of instructions
+simInsts
+# NUmber of ticks
+simTicks
+# caches overall miss rate
+board.cache_hierarchy.l1dcaches.overallMissRate::total
+board.cache_hierarchy.l1icaches.overallMissRate::total
+board.cache_hierarchy.l2cache.overallMissRate::total
+# caches overall miss latency (Tick)
+board.cache_hierarchy.l1dcaches.overallMissLatency::total
+board.cache_hierarchy.l1icaches.overallMissLatency::total
+board.cache_hierarchy.l2cache.overallMissLatency::total
+# caches overall average miss latency (Tick/Count)
+board.cache_hierarchy.l1dcaches.overallAvgMissLatency::total
+board.cache_hierarchy.l1icaches.overallAvgMissLatency::total
+board.cache_hierarchy.l2cache.overallAvgMissLatency::total
+# IPC
 board.processor.cores.core.ipc
+# Number of instructions fetched each cycle (Total) (Count)
+board.processor.cores.core.fetch.nisnDist::mean
+# Number of insts issued each cycle (Count)
+board.processor.cores.core.numIssuedDist::mean
+# Number of insts commited each cycle (Count)
+board.processor.cores.core.commit.numCommittedDist::mean
+# Insts written-back per cycle ((Count/Cycle))
+board.processor.cores.core.iew.wbRate 
+# Number of times the IQ has become full, causing a stall (Count)
+board.processor.cores.core.iew.iqFullEvents
+# Number of times the LSQ has become full, causing a stall (Count)
+board.processor.cores.core.iew.lsqFullEvents
+# The number of times a branch was mispredicted (Count)
+board.processor.cores.core.commit.branchMispredicts
+# Number of times rename has blocked due to ROB full (Count)
+board.processor.cores.core.rename.ROBFullEvents
+# Number of times rename has blocked due to IQ full (Count)
+board.processor.cores.core.rename.IQFullEvents
+# Number of times rename has blocked due to SQ full (Count)
+board.processor.cores.core.rename.SQFullEvents

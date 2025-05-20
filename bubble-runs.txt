@@ -1,5 +1,6 @@
 OK inorder-bubble-sort
 OK o3-very-big-bubble-sort
+OK o3-very-small-bubble-sort
 OK o3-base-bubble-sort
 DUMPED o3-width-02-bubble-sort
 OK o3-width-04-bubble-sort

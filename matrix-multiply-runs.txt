@@ -1,33 +1,34 @@
-OK inorder-riscv-matrix-multiply
-OK o3-very-big-riscv-matrix-multiply
-OK o3-base-riscv-matrix-multiply
-OK o3-width-02-riscv-matrix-multiply
-OK o3-width-04-riscv-matrix-multiply
-OK o3-width-08-riscv-matrix-multiply
-OK o3-width-10-riscv-matrix-multiply
-OK o3-width-12-riscv-matrix-multiply
-OK o3-rob-032-riscv-matrix-multiply
-OK o3-rob-064-riscv-matrix-multiply
-OK o3-rob-128-riscv-matrix-multiply
-OK o3-rob-256-riscv-matrix-multiply
-OK o3-rob-512-riscv-matrix-multiply
-DUMPED o3-physical-regs-032-riscv-matrix-multiply
-OK o3-physical-regs-064-riscv-matrix-multiply
-OK o3-physical-regs-128-riscv-matrix-multiply
-OK o3-physical-regs-256-riscv-matrix-multiply
-OK o3-physical-regs-512-riscv-matrix-multiply
-OK o3-fetchQ-32-riscv-matrix-multiply
-OK o3-fetchQ-64-riscv-matrix-multiply
-OK o3-fetchQ-128-riscv-matrix-multiply
-OK o3-fetchQ-256-riscv-matrix-multiply
-OK o3-fetchQ-512-riscv-matrix-multiply
-OK o3-instructionQ-32-riscv-matrix-multiply
-OK o3-instructionQ-64-riscv-matrix-multiply
-OK o3-instructionQ-128-riscv-matrix-multiply
-OK o3-instructionQ-256-riscv-matrix-multiply
-OK o3-instructionQ-512-riscv-matrix-multiply
-OK o3-lsQ-32-riscv-matrix-multiply
-OK o3-lsQ-64-riscv-matrix-multiply
-OK o3-lsQ-128-riscv-matrix-multiply
-OK o3-lsQ-256-riscv-matrix-multiply
-OK o3-lsQ-512-riscv-matrix-multiply
+inorder-riscv-matrix-multiply
+o3-very-big-riscv-matrix-multiply
+o3-very-small-riscv-matrix-multiply
+o3-base-riscv-matrix-multiply
+#o3-width-02-riscv-matrix-multiply
+#o3-width-04-riscv-matrix-multiply
+#o3-width-08-riscv-matrix-multiply
+#o3-width-10-riscv-matrix-multiply
+#o3-width-12-riscv-matrix-multiply
+#o3-rob-032-riscv-matrix-multiply
+#o3-rob-064-riscv-matrix-multiply
+#o3-rob-128-riscv-matrix-multiply
+#o3-rob-256-riscv-matrix-multiply
+#o3-rob-512-riscv-matrix-multiply
+#o3-physical-regs-032-riscv-matrix-multiply
+#o3-physical-regs-064-riscv-matrix-multiply
+#o3-physical-regs-128-riscv-matrix-multiply
+#o3-physical-regs-256-riscv-matrix-multiply
+#o3-physical-regs-512-riscv-matrix-multiply
+#o3-fetchQ-32-riscv-matrix-multiply
+#o3-fetchQ-64-riscv-matrix-multiply
+#o3-fetchQ-128-riscv-matrix-multiply
+#o3-fetchQ-256-riscv-matrix-multiply
+#o3-fetchQ-512-riscv-matrix-multiply
+#o3-instructionQ-32-riscv-matrix-multiply
+#o3-instructionQ-64-riscv-matrix-multiply
+#o3-instructionQ-128-riscv-matrix-multiply
+#o3-instructionQ-256-riscv-matrix-multiply
+#o3-instructionQ-512-riscv-matrix-multiply
+o3-lsQ-32-riscv-matrix-multiply
+o3-lsQ-64-riscv-matrix-multiply
+o3-lsQ-128-riscv-matrix-multiply
+o3-lsQ-256-riscv-matrix-multiply
+o3-lsQ-512-riscv-matrix-multiply

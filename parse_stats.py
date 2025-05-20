@@ -8,19 +8,20 @@ Usage (either style):
   ./parse_and_plot_gem5_stats.py \
     --runs width4 width8 width12 \
     --stats sim_seconds sim_insts ipc numCycles \
-    [--base-dir m5out] [--save-plots]
+    [--base-dir m5out] [--save-plots] [--output-csv collected.csv]
 
   # 2) From text files:
   ./parse_and_plot_gem5_stats.py \
     --runs-file runs.txt \
     --stats-file stats.txt \
-    [--base-dir m5out] [--save-plots]
+    [--base-dir m5out] [--save-plots] [--output-csv collected.csv]
 
   'runs.txt' and 'stats.txt' should have one name per line. Lines beginning
   with '#' or blank lines are ignored.
 
 Defaults:
   --base-dir m5out
+  --output-csv collected_stats.csv
   plots show on screen (omit --save-plots)
 """
 
@@ -96,19 +97,14 @@ def main():
                              help="Text file with one stat name per line")
     p.add_argument('--save-plots', action='store_true',
                    help="Save plots as PNGs instead of displaying them")
+    p.add_argument('--output-csv', default='collected_stats.csv',
+                   help="Write collected statistics to this CSV file (default: collected_stats.csv)")
     args = p.parse_args()
 
     # load run names
-    if args.runs_file:
-        runs = load_list_from_file(args.runs_file)
-    else:
-        runs = args.runs
-
+    runs = load_list_from_file(args.runs_file) if args.runs_file else args.runs
     # load stat names
-    if args.stats_file:
-        stats = load_list_from_file(args.stats_file)
-    else:
-        stats = args.stats
+    stats = load_list_from_file(args.stats_file) if args.stats_file else args.stats
 
     # collect data
     rows = []
@@ -135,6 +131,10 @@ def main():
     print("\nCollected statistics:\n")
     print(df)
 
+    # write to CSV for Excel
+    df.to_csv(args.output_csv)
+    print(f"\nSaved collected stats to '{args.output_csv}'")
+
     # plot each stat
     for stat in stats:
         if stat not in df.columns:
@@ -152,6 +152,7 @@ def main():
             outdir = "plots"
             os.makedirs(outdir, exist_ok=True)
             plt.savefig(os.path.join(outdir, f"{stat}.png"))
+            print(f"→ Saved plot: {os.path.join(outdir, f'{stat}.png')}")
         else:
             plt.show()
 
